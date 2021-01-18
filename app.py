@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, jsonify, url_for, redirect
+from flask_pymongo import PyMongo
+import os
 
 app = Flask(__name__)
+app.config['MONGO_URI'] = os.environ.get('MONGO_URI') 
+mongo = PyMongo(app)
+song = mongo.db.song_details 
 
 @app.route('/', methods = ['GET', 'POST'])
 def login():
@@ -9,28 +14,13 @@ def login():
 @app.route('/result', methods = ['GET', 'POST'])
 def result():
     song_name = request.form.get('song')
-    print(song_name)
-
-    #if (song_name = song_details.song_name):
+   # print(song_name)
 
     
+    song_det = song.find()
+   # print(song_det)
 
-    song_details = [
-        {
-            "song_name" : "Vaathi Raid",
-            "movie_name": "Master",
-            "music_director" : "Anirudh",
-            "singer_name" : "Arivu"
-        },
-        {
-            "song_name" : "Chellama",
-            "movie_name": "Doctor",
-            "music_director" : "Anirudh",
-            "singer_name" : "Anirudh"
-        }
-    ]
-
-    return render_template("index.html", song_details=song_details,song_name=song_name)
+    return render_template("index.html", song_details=song_det,song_name=song_name)
    
 
 if __name__ == "__main__":
