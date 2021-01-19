@@ -13,15 +13,24 @@ def login():
 
 @app.route('/result', methods = ['GET', 'POST'])
 def result():
+
+    song_name = None
+
+    if(request.method == 'get'):
+        return render_template("index.html")
+
     song_name = request.form.get('song')
-   # print(song_name)
+    print(song_name)
 
-    
-    song_det = song.find()
-   # print(song_det)
+    song_det = None
 
-    return render_template("index.html", song_details=song_det,song_name=song_name)
+    if(song_name):
+        song_det = song.find()
+
+    print('song_det: ', song_det)
+
+    return render_template("index.html", song_details = song_det, song_name = song_name)
    
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    app.run(host = '0.0.0.0', debug = True, port = 3000)
